@@ -4,12 +4,13 @@ import {
   deleteRent,
   finishRent,
   getRents,
-} from "../controllers/rentController";
+} from "../controllers/rentController.js";
+import validateRent from "../middlewares/rentValidation.js";
 
 const rentRouter = Router();
 
 rentRouter.get("/rentals", getRents);
-rentRouter.post("/rentals", createRent);
+rentRouter.post("/rentals", validateRent, createRent);
 rentRouter.post("/rentals/:id/return", finishRent);
 rentRouter.delete("/rentals/:id", deleteRent);
 
