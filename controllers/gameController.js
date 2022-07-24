@@ -2,19 +2,21 @@ import db from "../config/db.js";
 export async function getGames(req, res) {
   const { name } = req.query;
   try {
-    if (!name) {
-      const result = await db.query(`
-      SELECT *
-      FROM games;`);
-      return res.send(result.rows);
+    const params = [];
+    let whereText = "";
+    if (name) {
+      params.push(`${name}%`);
+      whereText += `WHERE games.name ILIKE $${params.length}`;
     }
+
     const result = await db.query(
       `
-    SELECT *
+    SELECT games.*, categories.name AS "categoryName"
     FROM games
-    Where name
-    LIKE $1;`,
-      [`${name}%`]
+    JOIN categories ON categories.id=games."categoryId"
+    ${whereText}
+    `,
+      params
     );
     res.send(result.rows);
   } catch (err) {
