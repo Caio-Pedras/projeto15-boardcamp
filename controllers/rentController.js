@@ -57,7 +57,6 @@ export async function createRent(req, res) {
     SELECT * FROM games WHERE id = $1`,
       [rental.gameId]
     );
-    console.log(validGame.rows);
     if (validGame.rows.length === 0) {
       return res.sendStatus(400);
     }
@@ -134,7 +133,19 @@ export async function finishRent(req, res) {
   }
 }
 export async function deleteRent(req, res) {
+  const { id } = req.params;
   try {
+    const result = await db.query(`SELECT * FROM rentals WHERE id =$1`, [id]);
+    if (result.rows.length === 0) {
+      return res.sendStatus(404);
+    }
+    const rental = result.rows[0];
+
+    if (!rental.returnDate) {
+      return res.sendStatus(400);
+    }
+    await db.query(`DELETE FROM rentals WHERE id = $1`, [id]);
+    res.sendStatus(200);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
