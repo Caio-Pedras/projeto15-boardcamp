@@ -61,15 +61,6 @@ export async function createRent(req, res) {
       return res.sendStatus(400);
     }
     const game = validGame.rows[0];
-    // const rentals = await db.query(
-    //   `SELECT * FROM rentals WHERE "gameId" = $1 "returnDate" is null`,
-    //   [game.id]
-    // );
-    // console.log(rentals.rows);
-    // if (game.stockTotal <= rentals.rows.length) {
-    //   return res.sendStatus(400);
-    // }
-
     const result = await db.query(
       `
     SELECT *
