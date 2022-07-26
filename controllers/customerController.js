@@ -79,9 +79,9 @@ export async function updateCustomer(req, res) {
       `
     UPDATE customers
     SET 
-      name =$1
-      phone = $2
-      cpf = $3
+      name =$1,
+      phone = $2,
+      cpf = $3,
       birthday = $4
     WHERE id =$5
     `,
